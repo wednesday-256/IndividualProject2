@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>After School Activities</title>
+    <script src="lessons.js"></script>
+  </head>
+  <style>
+    * {
+      font-family: arial;
+    }
+
+    .sitename {
+      color: ivory;
+    }
+    .controlBox {
+      border-radius: 7px;
+    }
+    .toast-body {
+      max-height: 150px;
+      line-height: normal;
+      background-color: ivory;
+    }
+    #searchBox {
+      width: 500px;
+      border-radius: 15px;
+      border: 2px solid #198754;
+      color: #198754;
+      padding: 3px 15px;
+      text-align: center;
+    }
+
+    #searchBox:focus {
+      background-color: ivory;
+      border: 2px solid ivory;
+    }
+
+    .lessonImage {
+      max-width: 140px;
+      max-height: 140px;
+      transition: transform ease-in 0.6s;
+    }
+    .lessonImage:hover {
+      transform: scale(1.09) rotate(-3deg);
+    }
+
+    .lesson {
+      background-color: ivory;
+      border: 2px solid ivory;
+      border-radius: 10px;
+      line-height: normal;
+      animation-name: slideIn;
+      animation-duration: 0.6s;
+      animation-timing-function: ease-in;
+    }
+
+    @keyframes slideIn {
+      0% {
+        transform: translate(90px, 0px);
+        background-color: white;
+      }
+    }
+
+    .lesson:hover {
+      border: 2px solid #198754;
+    }
+
+    .circle1 {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #ffca2c;
+      top: 60%;
+      left: 17px;
+      position: fixed;
+      z-index: -6;
+      animation-name: circle1;
+      animation-duration: 20s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+
+    .circle2 {
+      width: 50px;
+      height: 50px;
+      position: fixed;
+      border-radius: 50%;
+      background-color: #198754;
+      top: 70%;
+      z-index: 7;
+      left: 17px;
+      position: fixed;
+      opacity: 0.8;
+      z-index: -7;
+      animation-name: circle2;
+      animation-duration: 40s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: reverse;
+    }
+
+    @keyframes circle1 {
+      66% {
+        transform: translateY(95%);
+        background-color: ivory;
+      }
+      80% {
+        transform: scale(0.7);
+      }
+
+      33% {
+        transform: translateY(-95%);
+        background-color: #198754;
+      }
+    }
+    @keyframes circle2 {
+      66% {
+        transform: translateY(-90%);
+        background-color: ivory;
+      }
+      80% {
+        transform: scale(0.7);
+      }
+
+      33% {
+        transform: translateY(90%);
+        background-color: #ffca2c;
+      }
+    }
+  </style>
+  <body>
+    <div id="app">
+      <!-- header box -->
+      <div
+        class="bg-success bg-gradient sticky-top p-2 d-flex justify-content-between align-items-center justify-content-lg-around mb-3"
+      >
+        <h5 class="sitename mx-2 fw-bolder">{{sitename}}</h5>
+
+        <div class="checkoutBox">
+          <button
+            class="btn-warning btn bg-gradient position-relative mx-2"
+            v-if="cartCount() > 0 || !showLesson"
+            type="button"
+            @click="switchPage"
+          >
+            <i class="bi bi-cart-check-fill me-1"></i>{{showLesson ? "Checkout"
+            : "Activities"}}
+            <span
+              v-if="showLesson"
+              class="badge bg-danger position-absolute top-0 start-100 translate-middle round-pill"
+              >{{cartCount()}}</span
+            >
+          </button>
+        </div>
+      </div>
+
+      <div v-if="showLesson">
+        <!-- controls box  -->
+        <div
+          class="container p-4 bg-light controlBox d-flex flex-column flex-lg-row justify-content-around align-items-center"
+        >
+          <div class="searchBox d-flex flex-column">
+            <h6 class="mb-2">Search:</h6>
+            <input
+              id="searchBox"
+              type="text"
+              placeholder="Enter Search Term"
+              v-model="searchTerm"
+            />
+          </div>
+
+          <div class="toolBox container">
+            <!-- sort section  -->
+            <div
+              class="sortBox d-flex flex-column m-3 p-2 justify-content-between"
+            >
+              <h6 class="mb-2">Sort:</h6>
+
+              <div class="btn-group btn-group-sm" role="group">
+                <input
+                  class="btn-check"
+                  type="radio"
+                  name="attribute"
+                  id="subject"
+                  autocomplete="off"
+                  value="subject"
+                  checked
+                  v-model="sortAttr"
+                />
+                <label class="btn btn-outline-success" for="subject"
+                  >Subject</label
+                >
+                <input
+                  class="btn-check"
+                  name="attribute"
+                  type="radio"
+                  id="location"
+                  autocomplete="off"
+                  value="location"
+                  v-model="sortAttr"
+                />
+                <label class="btn btn-outline-success" for="location"
+                  >Location</label
+                >
+                <input
+                  class="btn-check"
+                  name="attribute"
+                  type="radio"
+                  id="price"
+                  value="price"
+                  v-model="sortAttr"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-success" for="price">Price</label>
+                <input
+                  class="btn-check"
+                  name="attribute"
+                  type="radio"
+                  id="available"
+                  value="availableSpace"
+                  v-model="sortAttr"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-success" for="available"
+                  >Availablity</label
+                >
+              </div>
+              <div class="mt-3 btn-group btn-group-sm" role="group">
+                <input
+                  class="btn-check"
+                  type="radio"
+                  id="ascending"
+                  autocomplete="off"
+                  value="ascending"
+                  name="order"
+                  checked
+                  v-model="order"
+                />
+                <label class="btn-outline-success btn" for="ascending"
+                  ><i class="bi bi-arrow-up me-1"></i>Ascending</label
+                >
+                <input
+                  type="radio"
+                  class="btn-check"
+                  id="descending"
+                  value="descending"
+                  v-model="order"
+                  autocomplete="off"
+                  name="order"
+                />
+                <label class="btn-outline-success btn" for="descending"
+                  ><i class="bi bi-arrow-down me-1"></i>Descending</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- result box  -->
+        <div
+          class="resultBox container d-flex justify-content-around align-items-center flex-wrap"
+        >
+          <div class="d-flex m-2 lesson p-3" v-for="lesson in sortedLessons">
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="me-2">
+                <figure>
+                  <img class="lessonImage" :src="lesson.image" />
+                </figure>
+              </div>
+              <div class="ms-1 h-90">
+                <p><strong>Subject: </strong>{{lesson.subject}}</p>
+                <p><strong>Location: </strong>{{lesson.location}}</p>
+                <p><strong>Price: </strong>{{lesson.price | formatPrice}}</p>
+                <p><strong>Spaces: </strong>{{lesson.availableSpace}}</p>
+
+                <button
+                  v-if="canAddToCart(lesson)"
+                  class="btn btn-success btn-sm bg-gradient"
+                  @click="addToCart(lesson)"
+                >
+                  <i class="bi bi-plus-lg me-1"></i> Add To cart
+                </button>
+                <button
+                  v-else
+                  type="button"
+                  disabled
+                  class="btn btn-success btn-sm"
+                >
+                  <i class="bi bi-exclamation-circle-fill me-1"></i> Add To Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-else>
+        <!-- checkout box  -->
+        <div class="bg-light p-3 m-2 mx-lg-5 px-lg-5 mb-4 sticky-top">
+          <h4 class="m-2 text-warning fw-bolder text-uppercase">Check Out:</h4>
+          <!-- checkout errors -->
+          <ul class="mb-3 text-warning fs-6 fw-lighter">
+            <li><small>Full Name field accepts only letters.</small></li>
+            <li><small>Phone number field accepts only numbers.</small></li>
+          </ul>
+          <div class="input-group mb-3">
+            <span class="input-group-text bg-warning text-light" id="name"
+              ><i class="bi me-1 bi-person-fill"></i>Full Name:
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Full Name Here"
+              v-model="orderData.name"
+            />
+            <span class="input-group-text bg-warning text-light"
+              ><i class="bi me-2 bi-telephone-fill"></i>Phone Number:
+            </span>
+            <input
+              class="form-control"
+              placeholder="Enter Phone Number Here."
+              aria-label="phone number"
+              v-model="orderData.phoneNumber"
+            />
+            <button
+              type="button"
+              class="btn-success btn btn-sm bg-gradient"
+              v-if="isValid"
+              @click="submitOrder"
+            >
+              <i class="bi me-1 bi-check-circle-fill"></i> {{checkMsg}}
+            </button>
+            <button
+              type="button"
+              disabled
+              class="btn-warning btn btn-sm"
+              v-else
+            >
+              <i class="bi me-1 bi-exclamation-circle-fill"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- heading for cart page -->
+        <h4 class="text-center fw-bolder text-uppercase text-warning">
+          Cart List
+        </h4>
+
+        <!-- shopping cart box -->
+        <div
+          class="resultBox container d-flex justify-content-around align-items-center flex-wrap"
+        >
+          <div class="d-flex m-2 lesson p-3" v-for="lesson in getCartLessons()">
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="me-2">
+                <figure>
+                  <img class="lessonImage" :src="lesson.image" />
+                </figure>
+              </div>
+              <div class="ms-1 h-90">
+                <p><strong>Subject: </strong>{{lesson.subject}}</p>
+                <p><strong>Location: </strong>{{lesson.location}}</p>
+                <p><strong>Price: </strong>{{lesson.price | formatPrice}}</p>
+                <p><strong>Spaces: </strong>{{lesson.space}}</p>
+
+                <button
+                  class="btn btn-success btn-sm"
+                  @click="removeFromCart(lesson)"
+                >
+                  <i class="bi bi-trash3-fill me-1"></i> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- alerts box  -->
+      <div class="position-fixed bottom-0 start-0 p-3" style="z-index: 11">
+        <div
+          id="liveToast"
+          class="toast hide"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          ref="toast"
+        >
+          <div class="toast-header">
+            <i :class="notifyMsg.classAttr"></i>
+            <strong class="me-auto">{{notifyMsg.header}}</strong>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="toast"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="toast-body">
+            <p><strong>Subject: </strong>{{notifyMsg.subject}}</p>
+            <p><strong>Location: </strong>{{notifyMsg.location}}</p>
+            <p><strong>Price: </strong>{{notifyMsg.price | formatPrice}}</p>
+            <p><strong>Spaces: </strong>{{notifyMsg.space}}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- cirlces box  -->
+      <div class="position-relative">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      const webApp = new Vue({
+        el: "#app",
+        data: {
+          sitename: "After School Activities",
+          lessons: lessons,
+          searchTerm: "",
+          sortAttr: "subject",
+          order: "ascending",
+          cart: {},
+          checkMsg: "Checkout",
+          notifyMsg: {
+            header: "",
+            type: "",
+            classAttr: "",
+            subject: "",
+            location: "",
+            price: "",
+            space: "",
+          },
+          showLesson: true,
+          orderData: {
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+          },
+        },
+        filters: {
+          // formats price
+          formatPrice(price) {
+            if (!price) {
+              return "";
+            }
+            if (!parseInt(price)) {
+              throw Error("expects int or float value"); //throws error if the price valu is not an integer
+            }
+
+            return price.toLocaleString("en-US", {
+              style: "currency",
+              currency: "AED",
+              minimumFractionsDigits: 2,
+            });
+          },
+        },
+        methods: {
+          addToCart(lesson) {
+            // add lesson to cart
+            if (Object.keys(this.cart).includes(String(lesson.id))) {
+              // console.log("updating", this.cart);
+              this.cart[lesson.id]++;
+            } else {
+              this.cart[lesson.id] = 1;
+            }
+
+            //remove space from lesson
+            lesson.availableSpace--;
+
+            //notify the user of the add to cart operation
+            this.handleNotify(lesson, 1);
+          },
+          //handle notification
+          handleNotify(lesson, type) {
+            let classAttr = "rounded me-2 bi bi-bell-fill text-";
+
+            //changes the bell color depending on the type of notification
+            switch (type) {
+              case 1:
+                classAttr += "success";
+                this.notifyMsg.header = "Added To Cart!";
+                this.notifyMsg.type = 1;
+                break;
+              case 2:
+                classAttr += "danger";
+                this.notifyMsg.header = "Removed From Cart!";
+                this.notifyMsg.type = 2;
+                break;
+            }
+            this.notifyMsg.classAttr = classAttr;
+            this.notifyMsg.subject = lesson.subject;
+            this.notifyMsg.location = lesson.location;
+            this.notifyMsg.price = lesson.price;
+            this.notifyMsg.space =
+              this.cart[lesson.id] || lesson.availableSpace;
+
+            //create and show the notification
+            let toast = bootstrap.Toast.getOrCreateInstance(this.$refs.toast);
+            toast._config.delay = 3000;
+            toast.show();
+          },
+          submitOrder() {
+            this.checkMsg = "Order Submitted!";
+          },
+          switchPage() {
+            this.showLesson = !this.showLesson; //flips the showLesson value
+          },
+          removeFromCart(c_lesson) {
+            // console.log(c_lesson, "inside remove from cart");
+            // loops through the lesson list and updates it
+            lessons.forEach((lesson) => {
+              if (lesson.id == c_lesson.id) {
+                lesson.availableSpace = 5;
+                delete this.cart[lesson.id];
+                this.handleNotify(lesson, 2);
+              }
+            });
+          },
+          canAddToCart(lesson) {
+            if (this.cart[lesson.id] === undefined) {
+              return true;
+            }
+            return lesson.availableSpace > 0;
+          },
+          numOfSpaces(lesson) {
+            if (this.cart[lesson.id] === undefined) {
+              return 5;
+            }
+            return lesson.availableSpace - this.cart[lesson.id];
+          },
+          cartCount() {
+            // console.log(Object.keys(this.cart).length, "  <<cart count ");
+            return Object.keys(this.cart).length;
+          },
+          getCartLessons() {
+            let cartArray = [];
+
+            //updates the cart array with information about the activity
+            const updateArray = (id) => {
+              let lessonObj = { id: id },
+                cartObj;
+
+              cartObj = lessons.find((obj) => obj.id == id);
+              lessonObj.subject = cartObj.subject;
+              lessonObj.location = cartObj.location;
+              lessonObj.price = cartObj.price;
+              lessonObj.image = cartObj.image;
+              lessonObj.space = this.cart[id];
+
+              //adds object to the cartArray
+              cartArray.push(lessonObj);
+            };
+            Object.keys(this.cart).forEach(updateArray);
+            return cartArray;
+          },
+        },
+        computed: {
+          isValid() {
+            if (
+              this.orderData.phoneNumber === "" ||
+              this.orderData.name === ""
+            ) {
+              return false;
+            }
+            if (
+              this.orderData.phoneNumber.search(/[a-z]/gi) > -1 ||
+              this.orderData.name.search(/[0-9]/g) > -1
+            ) {
+              return false;
+            } else {
+              return true;
+            }
+          },
+          sortedLessons() {
+            let lessonArray = this.lessons.slice(0);
+            let newArray = [];
+
+            //checks the searchTerm
+            if (this.searchTerm) {
+              let regSearch = new RegExp(this.searchTerm, "gi");
+
+              //filter function
+              const filterFunction = (lesson) => {
+                let result, lessonText;
+                lessonText =
+                  lesson.subject +
+                  lesson.location +
+                  lesson.price +
+                  lesson.spaces;
+                result = lessonText.search(regSearch);
+                if (result < 0) {
+                  return false;
+                } else {
+                  return true;
+                }
+              };
+
+              lessonArray = lessonArray.filter(filterFunction);
+            }
+
+            // check function
+            const check = (a) => {
+              if (typeof a === String) {
+                return a.toLowerCase();
+              } else {
+                return a;
+              }
+            };
+
+            // sort function
+            const compare = (a, b) => {
+              if (check(a[this.sortAttr]) < check(b[this.sortAttr])) {
+                return -1;
+              }
+              if (check(a[this.sortAttr]) < check(b[this.sortAttr])) {
+                return 0;
+              }
+            };
+            if (this.order === "descending") {
+              return lessonArray.sort(compare).reverse();
+            }
+            return lessonArray.sort(compare);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
