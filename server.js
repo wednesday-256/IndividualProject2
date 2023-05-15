@@ -6,6 +6,7 @@ const fs = require("fs");
 const app = express();
 
 //database (mongo) initializations
+let db;
 const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb+srv://wednesday:pacman1234@cluster0.vjw7i5w.mongodb.net/";
 
@@ -13,9 +14,6 @@ MongoClient.connect(url, (err, client) => {
   db = client.db("webstore");
 });
 
-app.get;
-
-let db;
 const ObjectID = require("mongodb").ObjectID;
 
 // logger middleware function
@@ -65,10 +63,23 @@ app.use((req, res, next) => {
 //adds logger middleware to the application
 app.use(logger_middleware);
 
-//adds custom static file middleware to the application
+//adds custom static lesson image middleware to the application
+app.use(image_middleware);
+
+app.param("collectionName", (req, res, next, collectionName) => {
+  req.collection = db.collection(collectionName);
+  return next();
+});
 
 app.get("/", (req, res, next) => {
-  res.send("Select a collection, e.g .. .. //collection/messages");
+  res.send("Select a lesson, e.g .. .. //collection/lessons");
+});
+
+app.get("/collection/:collectionName", (req, res, next) => {
+  req.collection.find({}).toArray((e, results) => {
+    if (e) return next(e);
+    res.send(results);
+  });
 });
 
 const port = process.env.PORT || 3000;
