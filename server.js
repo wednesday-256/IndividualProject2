@@ -2,6 +2,19 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
+
+//database (mongo) initializations
+const MongoClient = require('mongodb').MongoClient;
+const url = "mongodb+srv://wednesday:pacman1234@cluster0.vjw7i5w.mongodb.net/";
+
+MongoClient.connect(url, (err, client)=>{
+    db = client.db('webstore')
+})
+
+app.get('/', (req, res, next)=>{
+    res.send('Select a collection, e.g .. .. //collection/messages')
+})
+
 let db;
 const ObjectID = require("mongodb").ObjectID;
 
