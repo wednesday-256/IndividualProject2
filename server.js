@@ -33,32 +33,38 @@ const image_middleware = (req, res, next) => {
   //checks if this is an image request
   let check = req.url.split("/")[1] === "images";
 
-  console.log(check, req.url);
+  // console.log(check, req.url);
 
+  // if the request is not an image request continue
   if (!check) {
     next();
     return;
   }
 
-  let filePath = path.join(__dirname, "static", req.url);
-  fs.stat("filePath", (err, fileInfo) => {
+  let filePath = path.join(__dirname, "static", req.url.split("/")[2]);
+
+  fs.stat(filePath, (err, fileInfo) => {
     if (err) {
-      console.log(err); //logs error to the console
-      next();
+      if (err.code === "ENOENT") {
+        res.status(404);
+        res.send("[0] Image file not Found !!");
+      } else {
+        console.log(err); //logs error to the console
+        res.send("[0] An Error occured!!");
+      }
       return;
     }
     if (fileInfo.isFile()) {
       res.sendFile(filePath);
     } else {
-      res.status(404);
-      res.send("Image file not Found!");
+      next();
     }
   });
 };
 
 app.use(express.json());
 app.use(cors());
-// app.set("port", 3000);
+app.set("port", 3000);
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-headers", "*");
@@ -71,13 +77,13 @@ app.use(logger_middleware);
 //adds custom static lesson image middleware to the application
 app.use(image_middleware);
 
+app.get("/", (req, res, next) => {
+  res.send("Select a lesson, e.g .. .. //collection/lessons");
+});
+
 app.param("collectionName", (req, res, next, collectionName) => {
   req.collection = db.collection(collectionName);
   return next();
-});
-
-app.get("/", (req, res, next) => {
-  res.send("Select a lesson, e.g .. .. //collection/lessons");
 });
 
 app.get("/collection/:collectionName", (req, res, next) => {
