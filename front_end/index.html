@@ -573,7 +573,7 @@
                 if (json.msg === "success") {
                   this.checkMsg = "Order Submitted!";
                   Object.keys(update_array).forEach(update_num_space);
-                  setTimeout(() => (this.cart = {}), 3000) //clears the cart ;
+                  setTimeout(() => (this.cart = {}), 3000); //clears the cart ;
                 } else {
                   this.checkMsg = "An Error occured!";
                 }
@@ -655,29 +655,19 @@
           },
           sortedLessons() {
             let lessonArray = this.lessons.slice(0);
-            let newArray = [];
 
             //checks the searchTerm
             if (this.searchTerm) {
-              let regSearch = new RegExp(this.searchTerm, "gi");
+              let search_url = lesson_url + "/" + searchTerm;
 
-              //filter function
-              const filterFunction = (lesson) => {
-                let result, lessonText;
-                lessonText =
-                  lesson.subject +
-                  lesson.location +
-                  lesson.price +
-                  lesson.spaces;
-                result = lessonText.search(regSearch);
-                if (result < 0) {
-                  return false;
-                } else {
-                  return true;
-                }
-              };
-
-              lessonArray = lessonArray.filter(filterFunction);
+              fetch(search_url)
+                .then((resp) => resp.json())
+                .then((json) => {
+                  lessonArray = json;
+                })
+                .catch((e) => {
+                  console.error(e);
+                });
             }
 
             // check function
@@ -698,6 +688,7 @@
                 return 0;
               }
             };
+
             if (this.order === "descending") {
               return lessonArray.sort(compare).reverse();
             }

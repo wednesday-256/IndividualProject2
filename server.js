@@ -101,6 +101,23 @@ app.post("/collection/:collectionName", (req, res, next) => {
   });
 });
 
+app.get("/collection/:collectionName/:searchTerm", (req, res, next) => {
+  let value = req.params.searchTerm;
+  req.collection
+    .find({
+      $or: [
+        { availableSpace: parseInt(value) },
+        { location: value },
+        { price: value },
+        { subject: value },
+      ],
+    })
+    .toArray((e, results) => {
+      if (err) return next(err);
+      res.send(results);
+    });
+});
+
 app.put("/collection/:collectionName/:id", (req, res, next) => {
   req.collection.update(
     { _id: new ObjectID(req.params.id) },
