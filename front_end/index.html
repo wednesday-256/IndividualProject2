@@ -523,10 +523,15 @@
             let order = {
               ...this.orderData.phoneNumber,
             };
+            let update_array = {};
             let orderObj = {};
+
             const get_obj_id = (p_id) => {
               let product = this.lessons.find((obj) => obj.id == p_id);
               orderObj[product._id] = this.cart[p_id];
+              //add the object to be updated with the id and space
+              update_array[product._id] =
+                product.availableSpace - this.cart[p_id];
             };
 
             Object.keys(this.cart).forEach(get_obj_id);
@@ -543,11 +548,32 @@
               body: JSON.stringify(order),
             };
 
+            const update_num_space = (p_id) => {
+              update_url = lesson_url + "/" + p_id;
+              let update = {
+                availableSpace: update_array[p_id],
+              };
+              const options = {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JOSN.stringify(update),
+              };
+              fetch(update_url, options)
+                .then((resp) => resp.json())
+                .then((json) => {
+                  if (!json.msg === "success") {
+                    console.log("An Error occured!, " + p_id);
+                  }
+                });
+            };
+
             fetch(order_url, options)
               .then((response) => response.json())
               .then((json) => {
-                if (json.msg === success) {
+                if (json.msg === "success") {
                   this.checkMsg = "Order Submitted!";
+                  Object.keys(update_array).forEach(update_num_space);
+                  setTimeout(() => (this.cart = {}), 3000) //clears the cart ;
                 } else {
                   this.checkMsg = "An Error occured!";
                 }
