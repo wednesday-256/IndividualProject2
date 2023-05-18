@@ -430,11 +430,13 @@
       </div>
     </div>
     <script type="text/javascript">
+      const lesson_url = "http://localhost:3000/collection/lessons";
+      const order_url = "http://localhost:3000/collection/orders";
       const webApp = new Vue({
         el: "#app",
         data: {
           sitename: "After School Activities",
-          lessons: lessons,
+          lessons: [],
           searchTerm: "",
           sortAttr: "subject",
           order: "ascending",
@@ -451,8 +453,7 @@
           },
           showLesson: true,
           orderData: {
-            firstName: "",
-            lastName: "",
+            name: "",
             phoneNumber: "",
           },
         },
@@ -519,9 +520,45 @@
             toast.show();
           },
           submitOrder() {
-            this.checkMsg = "Order Submitted!";
+            let order = {
+              ...this.orderData.phoneNumber,
+            };
+            let orderObj = {};
+            const get_obj_id = (p_id) => {
+              let product = this.lessons.find((obj) => obj.id == p_id);
+              orderObj[product._id] = this.cart[p_id];
+            };
+
+            Object.keys(this.cart).forEach(get_obj_id);
+
+            //adds ordered products id and spaces to order object
+            order["order"] = orderObj;
+
+            //post request to add order to the order collection
+            const options = {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(order),
+            };
+
+            fetch(order_url, options)
+              .then((response) => response.json())
+              .then((json) => {
+                if (json.msg === success) {
+                  this.checkMsg = "Order Submitted!";
+                } else {
+                  this.checkMsg = "An Error occured!";
+                }
+              });
           },
           switchPage() {
+            fetch(lesson_url)
+              .then((response) => response.json())
+              .then((json) => {
+                webApp.lessons = json;
+              });
             this.showLesson = !this.showLesson; //flips the showLesson value
           },
           removeFromCart(c_lesson) {
@@ -559,7 +596,7 @@
               let lessonObj = { id: id },
                 cartObj;
 
-              cartObj = lessons.find((obj) => obj.id == id);
+              cartObj = this.lessons.find((obj) => obj.id == id);
               lessonObj.subject = cartObj.subject;
               lessonObj.location = cartObj.location;
               lessonObj.price = cartObj.price;
@@ -640,6 +677,13 @@
             }
             return lessonArray.sort(compare);
           },
+        },
+        created: () => {
+          fetch(lesson_url)
+            .then((response) => response.json())
+            .then((json) => {
+              webApp.lessons = json;
+            });
         },
       });
     </script>
