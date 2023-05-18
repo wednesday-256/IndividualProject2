@@ -32,13 +32,18 @@ const logger_middleware = (req, res, next) => {
 const image_middleware = (req, res, next) => {
   //checks if this is an image request
   let check = req.url.split("/")[1] === "images";
+
+  console.log(check, req.url);
+
   if (!check) {
     next();
     return;
   }
+
   let filePath = path.join(__dirname, "static", req.url);
   fs.stat("filePath", (err, fileInfo) => {
     if (err) {
+      console.log(err); //logs error to the console
       next();
       return;
     }
@@ -79,6 +84,13 @@ app.get("/collection/:collectionName", (req, res, next) => {
   req.collection.find({}).toArray((e, results) => {
     if (e) return next(e);
     res.send(results);
+  });
+});
+
+app.post("/collection/:collectionName", (req, res, next) => {
+  req.collection.insert(req.body, (e, results) => {
+    if (e) return next(e);
+    res.send(results.ops);
   });
 });
 
