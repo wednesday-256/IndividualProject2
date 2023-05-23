@@ -22,7 +22,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>After School Activities</title>
-    <script src="lessons.js"></script>
   </head>
   <style>
     * {
@@ -41,7 +40,7 @@
       background-color: ivory;
     }
     #searchBox {
-      width: 500px;
+      width: 100%;
       border-radius: 15px;
       border: 2px solid #198754;
       color: #198754;
@@ -61,6 +60,21 @@
     }
     .lessonImage:hover {
       transform: scale(1.09) rotate(-3deg);
+    }
+
+    .cart_image {
+      font-size: 150px;
+      animation-name: zoom;
+      animation-duration: 2s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes zoom {
+      50% {
+        transform: scale(1.1);
+        color: ivory;
+      }
     }
 
     .lesson {
@@ -146,6 +160,56 @@
         background-color: #ffca2c;
       }
     }
+    /* Shape styling  */
+    .shapes {
+      position: relative;
+    }
+
+    .shape1 {
+      position: fixed;
+      width: 150px;
+      height: 20px;
+      transform: skew(25deg);
+      background-color: #ffca2c;
+      right: 9px;
+      bottom: -8px;
+      opacity: 0.5;
+      animation-name: shape1;
+      z-index: -7;
+      animation-duration: 40s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: reverse;
+    }
+
+    .shape2 {
+      position: fixed;
+      width: 150px;
+      height: 20px;
+      transform: skew(25deg);
+      background-color: #198754;
+      right: 70px;
+      bottom: -8px;
+      opacity: 0.7;
+      z-index: -7;
+      animation-name: shape2;
+      animation-duration: 40s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: reverse;
+    }
+    @keyframes shape1 {
+      50% {
+        right: 200px;
+        opacity: 1;
+      }
+    }
+    @keyframes shape2 {
+      70% {
+        right: 400px;
+        opacity: 0.9;
+      }
+    }
   </style>
   <body>
     <div id="app">
@@ -185,6 +249,7 @@
               type="text"
               placeholder="Enter Search Term"
               v-model="searchTerm"
+              @input="() => handle_lessons()"
             />
           </div>
 
@@ -316,54 +381,75 @@
       <div v-else>
         <!-- checkout box  -->
         <div class="bg-light p-3 m-2 mx-lg-5 px-lg-5 mb-4 sticky-top">
-          <h4 class="m-2 text-warning fw-bolder text-uppercase">Check Out:</h4>
+          <h4 class="m-2 text-success fw-bolder text-uppercase">Check Out:</h4>
           <!-- checkout errors -->
-          <ul class="mb-3 text-warning fs-6 fw-lighter">
+          <ul class="mb-3 text-success fs-6 fw-lighter">
             <li><small>Full Name field accepts only letters.</small></li>
             <li><small>Phone number field accepts only numbers.</small></li>
           </ul>
-          <div class="input-group mb-3">
-            <span class="input-group-text bg-warning text-light" id="name"
-              ><i class="bi me-1 bi-person-fill"></i>Full Name:
-            </span>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Enter Full Name Here"
-              v-model="orderData.name"
-            />
-            <span class="input-group-text bg-warning text-light"
-              ><i class="bi me-2 bi-telephone-fill"></i>Phone Number:
-            </span>
-            <input
-              class="form-control"
-              placeholder="Enter Phone Number Here."
-              aria-label="phone number"
-              v-model="orderData.phoneNumber"
-            />
-            <button
-              type="button"
-              class="btn-success btn btn-sm bg-gradient"
-              v-if="isValid"
-              @click="submitOrder"
-            >
-              <i class="bi me-1 bi-check-circle-fill"></i> {{checkMsg}}
-            </button>
-            <button
-              type="button"
-              disabled
-              class="btn-warning btn btn-sm"
-              v-else
-            >
-              <i class="bi me-1 bi-exclamation-circle-fill"></i>
-            </button>
+          <div
+            class="input-group mb-3 d-flex flex-sm-row flex-column justify-content-md-around justify-content-center align-items-center"
+          >
+            <div class="mx-2 p-1 flex-sm-grow-1">
+              <span class="input-group-text bg-warning text-light" id="name"
+                ><i class="bi me-1 bi-person-fill"></i>Full Name:
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter Full Name Here"
+                v-model="orderData.name"
+              />
+            </div>
+
+            <div class="mx-2 p-1 flex-sm-grow-1">
+              <span class="input-group-text bg-warning text-light"
+                ><i class="bi me-2 bi-telephone-fill"></i>Phone Number:
+              </span>
+              <input
+                class="form-control"
+                placeholder="Enter Phone Number Here."
+                aria-label="phone number"
+                v-model="orderData.phoneNumber"
+              />
+            </div>
+
+            <div class="mx-2 p-1">
+              <button
+                type="button"
+                class="btn-success btn btn-sm bg-gradient"
+                v-if="isValid"
+                @click="submitOrder"
+              >
+                <i class="bi me-1 bi-check-circle-fill"></i> {{checkMsg}}
+              </button>
+              <button
+                type="button"
+                disabled
+                class="btn-warning btn btn-sm"
+                v-else
+              >
+                <i class="bi me-1 bi-exclamation-circle-fill"></i>
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- heading for cart page -->
-        <h4 class="text-center fw-bolder text-uppercase text-warning">
+        <h4 class="text-center fw-bolder text-uppercase pt-2 text-success">
           Cart List
         </h4>
+
+        <div
+          class="empty_box d-flex flex-column justify-content-around align-items-center p-4"
+          v-if="Object.keys(cart).length <= 0"
+        >
+          <i
+            class="bi mx-auto my-auto cart_image bi-cart-x-fill text-success"
+          ></i>
+
+          <p class="text-success h4">Empty!!</p>
+        </div>
 
         <!-- shopping cart box -->
         <div
@@ -428,6 +514,11 @@
         <div class="circle1"></div>
         <div class="circle2"></div>
       </div>
+
+      <div class="shapes">
+        <div class="shape1"></div>
+        <div class="shape2"></div>
+      </div>
     </div>
     <script type="text/javascript">
       const lesson_url = "http://localhost:3000/collection/lessons";
@@ -456,6 +547,7 @@
             name: "",
             phoneNumber: "",
           },
+          sorted_lessons: [],
         },
         filters: {
           // formats price
@@ -506,13 +598,25 @@
                 this.notifyMsg.header = "Removed From Cart!";
                 this.notifyMsg.type = 2;
                 break;
+              case 3:
+                classAttr += "success";
+                this.notifyMsg.header = "Order Submitted!";
+                this.notifyMsg.type = 1;
+                break;
             }
             this.notifyMsg.classAttr = classAttr;
-            this.notifyMsg.subject = lesson.subject;
-            this.notifyMsg.location = lesson.location;
-            this.notifyMsg.price = lesson.price;
-            this.notifyMsg.space =
-              this.cart[lesson.id] || lesson.availableSpace;
+            if (type === 3) {
+              this.notifyMsg.subject = "Total Order";
+              this.notifyMsg.location = "Total Order";
+              this.notifyMsg.price = 0;
+              this.notifyMsg.space = "Total Order";
+            } else {
+              this.notifyMsg.subject = lesson.subject;
+              this.notifyMsg.location = lesson.location;
+              this.notifyMsg.price = lesson.price;
+              this.notifyMsg.space =
+                this.cart[lesson.id] || lesson.availableSpace;
+            }
 
             //create and show the notification
             let toast = bootstrap.Toast.getOrCreateInstance(this.$refs.toast);
@@ -521,7 +625,7 @@
           },
           submitOrder() {
             let order = {
-              ...this.orderData.phoneNumber,
+              ...this.orderData,
             };
             let update_array = {};
             let orderObj = {};
@@ -556,7 +660,7 @@
               const options = {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JOSN.stringify(update),
+                body: JSON.stringify(update),
               };
               fetch(update_url, options)
                 .then((resp) => resp.json())
@@ -571,9 +675,10 @@
               .then((response) => response.json())
               .then((json) => {
                 if (json.msg === "success") {
-                  this.checkMsg = "Order Submitted!";
+                  this.checkMsg = "Order Submitted!!";
+                  this.handleNotify({}, 3);
                   Object.keys(update_array).forEach(update_num_space);
-                  setTimeout(() => (this.cart = {}), 3000); //clears the cart ;
+                  setTimeout(() => (this.cart = {}), 1500); //clears the cart ;
                 } else {
                   this.checkMsg = "An Error occured!";
                 }
@@ -590,7 +695,7 @@
           removeFromCart(c_lesson) {
             // console.log(c_lesson, "inside remove from cart");
             // loops through the lesson list and updates it
-            lessons.forEach((lesson) => {
+            this.lessons.forEach((lesson) => {
               if (lesson.id == c_lesson.id) {
                 lesson.availableSpace = 5;
                 delete this.cart[lesson.id];
@@ -599,6 +704,7 @@
             });
           },
           canAddToCart(lesson) {
+            if (lesson.availableSpace === 0) return false;
             if (this.cart[lesson.id] === undefined) {
               return true;
             }
@@ -635,6 +741,30 @@
             Object.keys(this.cart).forEach(updateArray);
             return cartArray;
           },
+          handle_lessons() {
+            // this.sorted_lessons = this.lessons.slice(0);
+            // console.log(this.searchTerm, "This is within the handle lessons.");
+            //checks the searchTerm
+            if (this.searchTerm) {
+              let search_url = lesson_url + "/" + this.searchTerm;
+
+              fetch(search_url)
+                .then((resp) => resp.json())
+                .then((json) => {
+                  // console.log("results from server ", json);
+                  this.lessons = json;
+                })
+                .catch((e) => {
+                  console.error(e);
+                });
+            } else {
+              fetch(lesson_url)
+                .then((response) => response.json())
+                .then((json) => {
+                  this.lessons = json;
+                });
+            }
+          },
         },
         computed: {
           isValid() {
@@ -654,21 +784,22 @@
             }
           },
           sortedLessons() {
-            let lessonArray = this.lessons.slice(0);
+            this.sorted_lessons = this.lessons.slice(0);
 
-            //checks the searchTerm
-            if (this.searchTerm) {
-              let search_url = lesson_url + "/" + searchTerm;
+            // //checks the searchTerm
+            // if (this.searchTerm) {
+            //   let search_url = lesson_url + "/" + this.searchTerm;
 
-              fetch(search_url)
-                .then((resp) => resp.json())
-                .then((json) => {
-                  lessonArray = json;
-                })
-                .catch((e) => {
-                  console.error(e);
-                });
-            }
+            //   fetch(search_url)
+            //     .then((resp) => resp.json())
+            //     .then((json) => {
+            //       console.log("results from server ", json);
+            //       this.sorted_lessons = json;
+            //     })
+            //     .catch((e) => {
+            //       console.error(e);
+            //     });
+            // }
 
             // check function
             const check = (a) => {
@@ -690,9 +821,9 @@
             };
 
             if (this.order === "descending") {
-              return lessonArray.sort(compare).reverse();
+              return this.sorted_lessons.sort(compare).reverse();
             }
-            return lessonArray.sort(compare);
+            return this.sorted_lessons.sort(compare);
           },
         },
         created: () => {

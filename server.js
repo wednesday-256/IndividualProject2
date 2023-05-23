@@ -96,23 +96,24 @@ app.get("/collection/:collectionName", (req, res, next) => {
 app.post("/collection/:collectionName", (req, res, next) => {
   req.collection.insert(req.body, (e, results) => {
     if (e) return next(e);
-    res.send(result.result.n === 1 ? { msg: "success" } : { msg: "error" });
+    res.send(results.result.n === 1 ? { msg: "success" } : { msg: "error" });
     // res.send(results.ops);
   });
 });
 
 app.get("/collection/:collectionName/:searchTerm", (req, res, next) => {
-  let value = req.params.searchTerm;
+  let value = parseInt(req.params.searchTerm) || req.params.searchTerm;
+  value = new RegExp(value, "gi");
   req.collection
     .find({
       $or: [
-        { availableSpace: parseInt(value) },
-        { location: value },
-        { price: value },
-        { subject: value },
+        { availableSpace: { $regex: value } },
+        { location: { $regex: value } },
+        { price: { $regex: value } },
+        { subject: { $regex: value } },
       ],
     })
-    .toArray((e, results) => {
+    .toArray((err, results) => {
       if (err) return next(err);
       res.send(results);
     });
