@@ -20,7 +20,9 @@ const ObjectID = require("mongodb").ObjectID;
 const logger_middleware = (req, res, next) => {
   //logs the requests to the server console
   console.log(
-    "\n[!] Request Method: " +
+    "\n[!] Request Url: " +
+      req.url +
+      "\n[!] Request Method: " +
       req.method +
       "\n[!] Request Body: " +
       JSON.stringify(req.body)
@@ -96,8 +98,12 @@ app.get("/collection/:collectionName", (req, res, next) => {
 app.post("/collection/:collectionName", (req, res, next) => {
   req.collection.insert(req.body, (e, results) => {
     if (e) return next(e);
-    res.send(results.result.n === 1 ? { msg: "success" } : { msg: "error" });
-    // res.send(results.ops);
+    console.log(results.result.n, "within post function");
+    if (results.result.n === 1) {
+      res.send({ msg: "success" });
+    } else {
+      res.send({ msg: "Some error occurred" });
+    }
   });
 });
 

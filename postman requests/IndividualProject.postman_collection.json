@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "cec21887-f814-4827-9b6f-02dd51fe5043",
+		"name": "IndividualProject",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27369754"
+	},
+	"item": [
+		{
+			"name": "GET request (lessons)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/collection/lessons",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"collection",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SubmitOrder Post request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"name\": \"Hassan  Shukran\",\r\n        \"phoneNumber\": \"123232432255\",\r\n        \"order\": {\r\n            \"6465e75f82627d9259c39e1a\": 4\r\n        }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/collection/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"collection",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Spaces PUT request",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"availableSpace\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/collection/lessons/6465e75f82627d9259c39e15",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"collection",
+						"lessons",
+						"6465e75f82627d9259c39e15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Get Request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/collection/lessons/Aca",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"collection",
+						"lessons",
+						"Aca"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

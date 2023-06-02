@@ -4,6 +4,7 @@
   "description": "web app showing proficiency with vue.js, express, mongodb.",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Felix",

@@ -40,7 +40,7 @@
       background-color: ivory;
     }
     #searchBox {
-      width: 100%;
+      /* width: 100%; */
       border-radius: 15px;
       border: 2px solid #198754;
       color: #198754;
@@ -51,6 +51,15 @@
     #searchBox:focus {
       background-color: ivory;
       border: 2px solid ivory;
+    }
+
+    .text_input input {
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+    .text_input span {
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
     }
 
     .lessonImage {
@@ -242,7 +251,7 @@
         <div
           class="container p-4 bg-light controlBox d-flex flex-column flex-lg-row justify-content-around align-items-center"
         >
-          <div class="searchBox d-flex flex-column">
+          <div class="searchBox d-flex flex-column flex-sm-grow-1">
             <h6 class="mb-2">Search:</h6>
             <input
               id="searchBox"
@@ -348,7 +357,7 @@
             <div class="d-flex justify-content-center align-items-center">
               <div class="me-2">
                 <figure>
-                  <img class="lessonImage" :src="lesson.image" />
+                  <img class="lessonImage" :src="server_url + lesson.image" />
                 </figure>
               </div>
               <div class="ms-1 h-90">
@@ -388,7 +397,7 @@
             <li><small>Phone number field accepts only numbers.</small></li>
           </ul>
           <div
-            class="input-group mb-3 d-flex flex-sm-row flex-column justify-content-md-around justify-content-center align-items-center"
+            class="input-group text_input mb-3 d-flex flex-sm-row flex-column justify-content-md-around justify-content-center align-items-center"
           >
             <div class="mx-2 p-1 flex-sm-grow-1">
               <span class="input-group-text bg-warning text-light" id="name"
@@ -459,7 +468,7 @@
             <div class="d-flex justify-content-center align-items-center">
               <div class="me-2">
                 <figure>
-                  <img class="lessonImage" :src="lesson.image" />
+                  <img class="lessonImage" :src="server_url + lesson.image" />
                 </figure>
               </div>
               <div class="ms-1 h-90">
@@ -548,6 +557,7 @@
             phoneNumber: "",
           },
           sorted_lessons: [],
+          server_url: "http://localhost:3000/",
         },
         filters: {
           // formats price

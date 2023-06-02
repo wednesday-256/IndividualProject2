@@ -1,0 +1,110 @@
+[{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e12"
+  },
+  "id": 2,
+  "subject": "Coding Club",
+  "location": "Academic City",
+  "price": 200,
+  "availableSpace": 5,
+  "image": "images/coding.png"
+},
+{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e14"
+  },
+  "id": 4,
+  "subject": "Debate Team",
+  "location": "Academic City",
+  "price": 350,
+  "availableSpace": 5,
+  "image": "images/debate.png"
+},
+{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e18"
+  },
+  "id": 8,
+  "subject": "Art Class",
+  "location": "Al Safa",
+  "price": 300,
+  "availableSpace": 5,
+  "image": "images/art.png"
+},
+{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e19"
+  },
+  "id": 9,
+  "subject": "Academic Tutoring",
+  "location": "Knowledge Park",
+  "price": 500,
+  "availableSpace": 4,
+  "image": "images/academic_tutoring.png"
+},
+{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e17"
+  },
+  "id": 7,
+  "subject": "Photography Club",
+  "location": "Festival City",
+  "price": 700,
+  "availableSpace": 4,
+  "image": "images/photography.png"
+},
+{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e1a"
+  },
+  "id": 10,
+  "subject": "Creative Writing",
+  "location": "Academic City",
+  "price": 250,
+  "availableSpace": 5,
+  "image": "images/creative_writing.png"
+},
+{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e11"
+  },
+  "id": 1,
+  "subject": "Martial Arts",
+  "location": "Knowledge Park",
+  "price": 500,
+  "availableSpace": 5,
+  "image": "images/martial_arts.png"
+},
+{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e13"
+  },
+  "id": 3,
+  "subject": "Dance Class",
+  "location": "Festival City",
+  "price": 350,
+  "availableSpace": 5,
+  "image": "images/dance.png"
+},
+{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e16"
+  },
+  "id": 6,
+  "subject": "Science Club",
+  "location": "Knowledge Park",
+  "price": 250,
+  "availableSpace": 5,
+  "image": "images/science.png"
+},
+{
+  "_id": {
+    "$oid": "6465e75f82627d9259c39e15"
+  },
+  "id": 5,
+  "subject": "Yoga Class",
+  "location": "Al Safa",
+  "price": 500,
+  "availableSpace": 5,
+  "image": "images/yoga.png"
+}]
