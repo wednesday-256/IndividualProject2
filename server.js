@@ -8,7 +8,7 @@ const app = express();
 //database (mongo) initializations
 let db;
 const MongoClient = require("mongodb").MongoClient;
-const url = "mongodb+srv://wednesday:pacman1234@cluster0.vjw7i5w.mongodb.net/";
+const url = "secret phrase here";
 
 MongoClient.connect(url, (err, client) => {
   db = client.db("webstore");
